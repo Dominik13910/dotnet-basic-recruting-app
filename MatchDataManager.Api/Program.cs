@@ -1,3 +1,4 @@
+using MatchDataManager.Api.MiddleWare;
 using MatchDataManager.Api.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -24,6 +25,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseAuthorization();
 
