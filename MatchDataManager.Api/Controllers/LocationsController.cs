@@ -12,6 +12,7 @@ public class LocationsController : ControllerBase
     public IActionResult AddLocation(Location location)
     {
         LocationsRepository.AddLocation(location);
+
         return CreatedAtAction(nameof(GetById), new {id = location.Id}, location);
     }
 
