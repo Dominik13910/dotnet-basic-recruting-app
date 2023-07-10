@@ -32,7 +32,7 @@ public class LocationsServices : ILocationInterface
     {
         var location = _appDbContext.Location.ToList();
         var result = _mapper.Map<List<LocationDto>>(location);
-        return result;
+        return  result;
     }
     public async Task<Guid> Create(CreateLocationDto dto)
     {

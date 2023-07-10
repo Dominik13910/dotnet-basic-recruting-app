@@ -4,6 +4,7 @@ using MatchDataManager.Api.Dto.Team;
 using MatchDataManager.Api.Exceptions;
 using MatchDataManager.Api.Interfaces;
 using MatchDataManager.Api.Models;
+using MatchDataManager.Api.Models.Paination;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MatchDataManager.Api.Repositories;
@@ -29,10 +30,20 @@ public class TeamRepository : ITeamInterface
         return result;
     }
 
-    public async Task<ActionResult<IEnumerable<TeamDto>>> GetAll()
+    public async Task<PagedResult<TeamDto>> GetAll(Query query)
     {
-        var team = _appDbContext.Team.ToList();
-        var result = _mapper.Map<List<TeamDto>>(team);
+        var basequery = _appDbContext
+            .Team
+            .Where(r => query.SerchName == null || (r.Name.ToLower().Contains(query.SerchName.ToLower())));
+            
+        var team =  basequery
+            .Skip(query.PageSize * (query.PageNumber - 1))
+            .Take(query.PageSize)
+            .ToList();
+
+        var totalItemsCount = basequery.Count();
+        var teamDto =   _mapper.Map<List<TeamDto>>(team);
+        var result = new PagedResult<TeamDto>(teamDto, totalItemsCount, query.PageSize, query.PageNumber);
         return result;
     }
     public async Task<Guid> Create(CreateTeamDto dto)
@@ -40,11 +51,15 @@ public class TeamRepository : ITeamInterface
         var team = _mapper.Map<Team>(dto);
         _appDbContext.Team.Add(team);
         _appDbContext.SaveChanges();
-        return team.Id;
+        return  team.Id;
     }
     public async Task Delete(Guid id)
     {
+        
+
         _logger.LogError($"Team with id:{id} Deleted action invoked");
+        _logger.LogInformation($"Information{id}");
+
         var team = GetTeamById(id);
         _appDbContext.Team.Remove(team);
         _appDbContext.SaveChanges();

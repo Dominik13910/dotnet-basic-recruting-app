@@ -1,7 +1,7 @@
 using MatchDataManager.Api.Dto.Location;
 using MatchDataManager.Api.Dto.Team;
 using MatchDataManager.Api.Interfaces;
-using MatchDataManager.Api.Models;
+using MatchDataManager.Api.Models.Paination;
 using MatchDataManager.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,9 +36,9 @@ public class TeamsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TeamDto>>> GetAll()
+    public async Task<ActionResult<IEnumerable<TeamDto>>> GetAll([FromQuery] Query query)
     {
-        var result =  await _teamInterface.GetAll();
+        var result =  await _teamInterface.GetAll(query);
         return Ok(result);
     }
 
