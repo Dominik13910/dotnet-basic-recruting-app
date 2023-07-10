@@ -6,11 +6,11 @@ namespace MatchDataManager.Api.Interfaces
 {
     public interface ITeamInterface
     {
-        TeamDto GetById(Guid id);
-        ActionResult<IEnumerable<TeamDto>> GetAll();
-        Guid Create(CreateTeamDto dto);
-        void Delete(Guid id);
-        
+        Task<TeamDto> GetById(Guid id);
+        Task<ActionResult<IEnumerable<TeamDto>>> GetAll();
+        Task<Guid> Create(CreateTeamDto dto);
+        Task Delete(Guid id);
+        Task Update(Guid id, UpdateTeamDto location);
 
     }
 }

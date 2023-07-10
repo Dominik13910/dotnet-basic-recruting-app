@@ -1,5 +1,7 @@
+using MatchDataManager.Api.Interfaces;
 using MatchDataManager.Api.MiddleWare;
 using MatchDataManager.Api.Models;
+using MatchDataManager.Api.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Reflection;
@@ -15,6 +17,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseNpgsql(builder.Configuration.GetConnectionString("MyBoardsConnectionString")));
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddScoped<ITeamInterface, TeamRepository>();
+builder.Services.AddScoped<ILocationInterface, LocationsServices>();
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

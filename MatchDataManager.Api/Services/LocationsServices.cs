@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MatchDataManager.Api.Repositories;
 
-public class LocationsRepository : ILocationInterface
+public class LocationsServices : ILocationInterface
 {
     private readonly AppDbContext _appDbContext;
     private readonly IMapper _mapper;
-    private readonly ILogger<LocationsRepository> _logger;
+    private readonly ILogger<LocationsServices> _logger;
 
-    public LocationsRepository(AppDbContext appDbContext, IMapper mapper, ILogger<LocationsRepository> logger)
+    public LocationsServices(AppDbContext appDbContext, IMapper mapper, ILogger<LocationsServices> logger)
     {
         _appDbContext = appDbContext;
         _mapper = mapper;
@@ -21,32 +21,41 @@ public class LocationsRepository : ILocationInterface
             
     }
 
-    public LocationDto GetById(int id)
+    public async Task<LocationDto> GetById(Guid id)
     {
-        var location = GetLocationById;
+        var location = GetLocationById(id);
         var result = _mapper.Map<LocationDto>(location);
         return result;
     }
 
-    public ActionResult<IEnumerable<LocationDto>> GetAll()
+    public async Task<ActionResult<IEnumerable<LocationDto>>> GetAll()
     {
         var location = _appDbContext.Location.ToList();
         var result = _mapper.Map<List<LocationDto>>(location);
         return result;
     }
-    public Guid Create(CreateLocationDto dto)
+    public async Task<Guid> Create(CreateLocationDto dto)
     {
         var location = _mapper.Map<Location>(dto);
         _appDbContext.Location.Add(location);
         _appDbContext.SaveChanges();
-        return location.Id;
+        return  location.Id;
     }
-    public void Delete(int id)
+    public async Task Delete(Guid id)
     {
-        _logger.LogError($"User with id:{id} Deleted action invoked");
-        var location = GetLocationById;
+        _logger.LogError($"Location with id:{id} Deleted action invoked");
+        var location = GetLocationById(id);
         _appDbContext.Location.Remove(location);
         _appDbContext.SaveChanges();
+        
+    }
+    public async Task Update(Guid id, UpdateLocationDto location)
+    {
+        var result = GetLocationById(id);
+        result.Name = location.Name;
+        result.City = location.City;
+        _appDbContext.SaveChanges();
+        
     }
 
 
@@ -57,8 +66,9 @@ public class LocationsRepository : ILocationInterface
         if (location == null)
         {
             throw new NotFoundException("Location Not Found");
-            return location;
+            
         }
+        return location;
     }
 
 
