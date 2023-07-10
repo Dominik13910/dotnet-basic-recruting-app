@@ -15,6 +15,7 @@ namespace MatchDataManager.Api.Models
             //table requirements
             modelBuilder.Entity<Location>(eb =>
             {
+                eb.HasKey(l => l.Id);
                 eb.Property(l => l.Name).IsRequired().HasMaxLength(256);
                 eb.Property(l => l.City).IsRequired().HasMaxLength(55);
                 eb.HasIndex(l => l.Name).IsUnique();
@@ -23,6 +24,7 @@ namespace MatchDataManager.Api.Models
 
             modelBuilder.Entity<Team>(eb =>
             {
+                eb.HasKey(t => t.Id);
                 eb.Property(t => t.Name).IsRequired().HasMaxLength(256);
                 eb.Property(t => t.CoachName).IsRequired().HasMaxLength(55);
                 eb.HasIndex(t => t.Name).IsUnique();

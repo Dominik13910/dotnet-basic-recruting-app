@@ -6,10 +6,12 @@ namespace MatchDataManager.Api.Interfaces
 {
     public interface ILocationInterface
     {
-        LocationDto GetById(Guid id);
-        ActionResult<IEnumerable<LocationDto>> GetAll();
-        Guid Create(CreateLocationDto dto);
-        void Delete(Guid id);
-        
+        Task<LocationDto> GetById(Guid id);
+        Task<ActionResult<IEnumerable<LocationDto>>> GetAll();
+        Task<Guid> Create(CreateLocationDto dto);
+        Task Delete(Guid id);
+        Task Update(Guid id, UpdateLocationDto location);
+
+
     }
 }

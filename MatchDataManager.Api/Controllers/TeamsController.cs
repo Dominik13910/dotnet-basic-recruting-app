@@ -1,3 +1,6 @@
+using MatchDataManager.Api.Dto.Location;
+using MatchDataManager.Api.Dto.Team;
+using MatchDataManager.Api.Interfaces;
 using MatchDataManager.Api.Models;
 using MatchDataManager.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -8,42 +11,47 @@ namespace MatchDataManager.Api.Controllers;
 [Route("[controller]")]
 public class TeamsController : ControllerBase
 {
-    [HttpPost]
-    public IActionResult AddTeam(Team team)
+    private readonly ITeamInterface _teamInterface;
+
+    public TeamsController(ITeamInterface locationInterface)
     {
-        TeamsRepository.AddTeam(team);
-        return CreatedAtAction(nameof(GetById), new {id = team.Id}, team);
+        _teamInterface = locationInterface;
+    }
+
+
+
+    [HttpPost]
+    public async Task<ActionResult> AddTeam([FromBody] CreateTeamDto team)
+    {
+        var result = await _teamInterface.Create(team);
+        return Created($"/api/Team/{result}", null);
     }
 
     [HttpDelete]
-    public IActionResult DeleteTeam(Guid teamId)
+    public async Task DeleteTeam([FromQuery] Guid id)
     {
-        TeamsRepository.DeleteTeam(teamId);
-        return NoContent();
+       await _teamInterface.Delete(id);
+        
+
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public async Task<ActionResult<IEnumerable<TeamDto>>> GetAll()
     {
-        return Ok(TeamsRepository.GetAllTeams());
+        var result =  await _teamInterface.GetAll();
+        return Ok(result);
     }
 
     [HttpGet("{id:guid}")]
-    public IActionResult GetById(Guid id)
+    public async Task<ActionResult<TeamDto>> GetById([FromRoute] Guid id)
     {
-        var location = TeamsRepository.GetTeamById(id);
-        if (location is null)
-        {
-            return NotFound();
-        }
-
-        return Ok(location);
+        var result = await _teamInterface.GetById(id);
+        return Ok(result);
     }
-
-    [HttpPut]
-    public IActionResult UpdateTeam(Team team)
+     [HttpPut]
+    public async Task  UpdateTeam([FromQuery] Guid id, [FromBody] UpdateTeamDto team)
     {
-        TeamsRepository.UpdateTeam(team);
-        return Ok(team);
+        await _teamInterface.Update(id, team);
+        
     }
 }

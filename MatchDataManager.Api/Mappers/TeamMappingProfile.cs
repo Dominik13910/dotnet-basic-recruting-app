@@ -16,15 +16,15 @@ namespace MatchDataManager.Api.Mappers
                 opt => opt.MapFrom(src => $"{src.Id}")
                 )
              .ForMember(
-                dest => dest.Id,
+                dest => dest.Name,
                 opt => opt.MapFrom(src => $"{src.Name}")
                 )
              .ForMember(
-                dest => dest.Id,
+                dest => dest.CoachName,
                 opt => opt.MapFrom(src => $"{src.CoachName}")
                 );
 
-            CreateMap<CreateTeamDto, TeamDto>();
+            CreateMap<CreateTeamDto, Team>();
 
         }
     }

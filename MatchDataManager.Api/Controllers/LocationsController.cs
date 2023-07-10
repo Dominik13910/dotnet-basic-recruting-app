@@ -1,3 +1,5 @@
+using MatchDataManager.Api.Dto.Location;
+using MatchDataManager.Api.Interfaces;
 using MatchDataManager.Api.Models;
 using MatchDataManager.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -8,43 +10,49 @@ namespace MatchDataManager.Api.Controllers;
 [Route("[controller]")]
 public class LocationsController : ControllerBase
 {
-    [HttpPost]
-    public IActionResult AddLocation(Location location)
-    {
-        LocationsRepository.AddLocation(location);
+    private readonly ILocationInterface _locationInterface;
 
-        return CreatedAtAction(nameof(GetById), new {id = location.Id}, location);
+    public LocationsController(ILocationInterface locationInterface)
+    {
+        _locationInterface = locationInterface;
+    }
+      
+
+
+    [HttpPost]
+    public async Task<ActionResult> AddLocation([FromBody] CreateLocationDto location)
+    {
+        var result = await _locationInterface.Create(location);
+        return Created($"/api/Location/{result}", null); 
     }
 
     [HttpDelete]
-    public IActionResult DeleteLocation(Guid locationId)
+    public async Task DeleteLocation([FromQuery]Guid locationId)
     {
-        LocationsRepository.DeleteLocation(locationId);
-        return NoContent();
+         await _locationInterface.Delete(locationId);
+        
+     
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public async Task<ActionResult<IEnumerable<LocationDto>>> GetAll()
     {
-        return Ok(LocationsRepository.GetAllLocations());
+        var result = await _locationInterface.GetAll();
+        return Ok(result);
     }
 
     [HttpGet("{id:guid}")]
-    public IActionResult GetById(Guid id)
+    public async Task<ActionResult<LocationDto>> GetById([FromRoute]Guid id)
     {
-        var location = LocationsRepository.GetLocationById(id);
-        if (location is null)
-        {
-            return NotFound();
-        }
-
-        return Ok(location);
+        var result= await _locationInterface.GetById(id);
+        return Ok(result);
+     
     }
 
     [HttpPut]
-    public IActionResult UpdateLocation(Location location)
+    public async Task UpdateLocation([FromQuery] Guid id, [FromBody] UpdateLocationDto location)
     {
-        LocationsRepository.UpdateLocation(location);
-        return Ok(location);
+       await _locationInterface.Update(id, location);
+        
     }
 }
