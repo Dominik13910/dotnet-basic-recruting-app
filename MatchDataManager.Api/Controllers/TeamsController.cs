@@ -54,4 +54,10 @@ public class TeamsController : ControllerBase
         await _teamInterface.Update(id, team);
         
     }
+    [HttpPost("login")]
+    public async Task<ActionResult> Login([FromBody] TeamDto dto, [FromRoute] Guid id)
+    {
+        string token =  await _teamInterface.GenerateJWt(id, dto);
+        return Ok(token);
+    }
 }

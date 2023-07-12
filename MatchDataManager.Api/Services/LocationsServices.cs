@@ -23,14 +23,14 @@ public class LocationsServices : ILocationInterface
 
     public async Task<LocationDto> GetById(Guid id)
     {
-        var location = GetLocationById(id);
+        var location =  await Task.Run(() => GetLocationById(id));
         var result = _mapper.Map<LocationDto>(location);
         return result;
     }
 
     public async Task<ActionResult<IEnumerable<LocationDto>>> GetAll()
     {
-        var location = _appDbContext.Location.ToList();
+        var location = await Task.Run(()=>_appDbContext.Location.ToList());
         var result = _mapper.Map<List<LocationDto>>(location);
         return  result;
     }
@@ -38,7 +38,7 @@ public class LocationsServices : ILocationInterface
     {
         var location = _mapper.Map<Location>(dto);
         _appDbContext.Location.Add(location);
-        _appDbContext.SaveChanges();
+        await _appDbContext.SaveChangesAsync();
         return  location.Id;
     }
     public async Task Delete(Guid id)
@@ -46,7 +46,7 @@ public class LocationsServices : ILocationInterface
         _logger.LogError($"Location with id:{id} Deleted action invoked");
         var location = GetLocationById(id);
         _appDbContext.Location.Remove(location);
-        _appDbContext.SaveChanges();
+       await _appDbContext.SaveChangesAsync();
         
     }
     public async Task Update(Guid id, UpdateLocationDto location)
@@ -54,7 +54,7 @@ public class LocationsServices : ILocationInterface
         var result = GetLocationById(id);
         result.Name = location.Name;
         result.City = location.City;
-        _appDbContext.SaveChanges();
+      await  _appDbContext.SaveChangesAsync();
         
     }
 

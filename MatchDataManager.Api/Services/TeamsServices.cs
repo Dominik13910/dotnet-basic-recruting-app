@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MatchDataManager.Api.Authentication;
 using MatchDataManager.Api.Dto.Location;
 using MatchDataManager.Api.Dto.Team;
 using MatchDataManager.Api.Exceptions;
@@ -6,6 +7,11 @@ using MatchDataManager.Api.Interfaces;
 using MatchDataManager.Api.Models;
 using MatchDataManager.Api.Models.Paination;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace MatchDataManager.Api.Repositories;
 
@@ -14,43 +20,46 @@ public class TeamRepository : ITeamInterface
     private readonly AppDbContext _appDbContext;
     private readonly IMapper _mapper;
     private readonly ILogger<LocationsServices> _logger;
+    private readonly AuthenticationSettings _authenticationSetting;
 
-    public TeamRepository(AppDbContext appDbContext, IMapper mapper, ILogger<LocationsServices> logger)
+    public TeamRepository(AppDbContext appDbContext, IMapper mapper, ILogger<LocationsServices> logger,AuthenticationSettings authenticationSettings)
     {
         _appDbContext = appDbContext;
         _mapper = mapper;
         _logger = logger;
+        _authenticationSetting = authenticationSettings;
 
     }
 
     public async Task<TeamDto> GetById(Guid id)
     {
-        var team = GetTeamById(id);
-        var result = _mapper.Map<TeamDto>(team);
+        var team = await GetTeamById(id);
+         
+        var result =  _mapper.Map<TeamDto>(team);
         return result;
     }
 
     public async Task<PagedResult<TeamDto>> GetAll(Query query)
     {
-        var basequery = _appDbContext
+        var basequery =  _appDbContext
             .Team
             .Where(r => query.SerchName == null || (r.Name.ToLower().Contains(query.SerchName.ToLower())));
             
-        var team =  basequery
+        var team =   await basequery
             .Skip(query.PageSize * (query.PageNumber - 1))
             .Take(query.PageSize)
-            .ToList();
+            .ToListAsync();
 
         var totalItemsCount = basequery.Count();
         var teamDto =   _mapper.Map<List<TeamDto>>(team);
-        var result = new PagedResult<TeamDto>(teamDto, totalItemsCount, query.PageSize, query.PageNumber);
-        return result;
+        var result =  new PagedResult<TeamDto>(teamDto, totalItemsCount, query.PageSize, query.PageNumber);
+        return  result;
     }
     public async Task<Guid> Create(CreateTeamDto dto)
     {
         var team = _mapper.Map<Team>(dto);
         _appDbContext.Team.Add(team);
-        _appDbContext.SaveChanges();
+        await _appDbContext.SaveChangesAsync();
         return  team.Id;
     }
     public async Task Delete(Guid id)
@@ -60,27 +69,59 @@ public class TeamRepository : ITeamInterface
         _logger.LogError($"Team with id:{id} Deleted action invoked");
         _logger.LogInformation($"Information{id}");
 
-        var team = GetTeamById(id);
-        _appDbContext.Team.Remove(team);
-        _appDbContext.SaveChanges();
+        var team =  await GetTeamById(id);
+       _appDbContext.Team.Remove(team);
+        await  _appDbContext.SaveChangesAsync();
     }
     public async Task Update(Guid id, UpdateTeamDto location)
     {
-        var result = GetTeamById(id);
+        var result =  await GetTeamById(id);
         result.Name = location.Name;
         result.CoachName = location.CoachName;
-        _appDbContext.SaveChanges();
+         await _appDbContext.SaveChangesAsync();
     }
 
-    private Team GetTeamById(Guid id)
+    private async Task <Team> GetTeamById(Guid id)
 
     {
-        var team = _appDbContext.Team.FirstOrDefault(t => t.Id == id);
+        var team = await _appDbContext.Team.FindAsync(id);
         if (team == null)
             throw new NotFoundException("Team Not Found");
 
         
         return team;
+    }
+    public async Task<string>  GenerateJWt (Guid id, TeamDto dto)
+    {     
+        var team =  await _appDbContext
+            .Team
+            .FirstOrDefaultAsync(t => t.Id == dto.Id);
+
+        if (team == null)
+        {
+            throw new Microsoft.AspNetCore.Http.BadHttpRequestException("Bad team");
+        }
+
+        var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, team.Id.ToString()),
+                new Claim(ClaimTypes.Name, $"{team.Name}"),
+                    new Claim("Coach", team.CoachName)
+            };
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSetting.JwtKey));
+        var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var expires = DateTime.Now.AddDays(_authenticationSetting.JwtExpireDays);
+
+        var token = new JwtSecurityToken(_authenticationSetting.JwtIssuer,
+            _authenticationSetting.JwtIssuer,
+            claims,
+            expires: expires,
+            signingCredentials: cred);
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+       
+        return tokenHandler.WriteToken(token);
+
     }
 
 }
