@@ -33,8 +33,7 @@ public class TeamRepository : ITeamInterface
 
     public async Task<TeamDto> GetById(Guid id)
     {
-        var team = await GetTeamById(id);
-         
+        var team = await GetTeamById(id);   
         var result =  _mapper.Map<TeamDto>(team);
         return result;
     }

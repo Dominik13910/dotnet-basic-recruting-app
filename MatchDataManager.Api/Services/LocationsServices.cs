@@ -4,6 +4,7 @@ using MatchDataManager.Api.Exceptions;
 using MatchDataManager.Api.Interfaces;
 using MatchDataManager.Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MatchDataManager.Api.Repositories;
 
@@ -23,14 +24,14 @@ public class LocationsServices : ILocationInterface
 
     public async Task<LocationDto> GetById(Guid id)
     {
-        var location =  await Task.Run(() => GetLocationById(id));
+        var location = await  GetLocationById(id);
         var result = _mapper.Map<LocationDto>(location);
         return result;
     }
 
     public async Task<ActionResult<IEnumerable<LocationDto>>> GetAll()
     {
-        var location = await Task.Run(()=>_appDbContext.Location.ToList());
+        var location = await _appDbContext.Location.ToListAsync();
         var result = _mapper.Map<List<LocationDto>>(location);
         return  result;
     }
@@ -44,14 +45,14 @@ public class LocationsServices : ILocationInterface
     public async Task Delete(Guid id)
     {
         _logger.LogError($"Location with id:{id} Deleted action invoked");
-        var location = GetLocationById(id);
+        var location = await GetLocationById(id);
         _appDbContext.Location.Remove(location);
        await _appDbContext.SaveChangesAsync();
         
     }
     public async Task Update(Guid id, UpdateLocationDto location)
     {
-        var result = GetLocationById(id);
+        var result = await GetLocationById(id);
         result.Name = location.Name;
         result.City = location.City;
       await  _appDbContext.SaveChangesAsync();
@@ -59,10 +60,10 @@ public class LocationsServices : ILocationInterface
     }
 
 
-    private Location GetLocationById(Guid Id)
+    private async  Task<Location> GetLocationById(Guid id)
         
     {
-        var location = _appDbContext.Location.FirstOrDefault(x => x.Id == Id);
+        var location = await _appDbContext.Location.FindAsync(id);
         if (location == null)
         {
             throw new NotFoundException("Location Not Found");
