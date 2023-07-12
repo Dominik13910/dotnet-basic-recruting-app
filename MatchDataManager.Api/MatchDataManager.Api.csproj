@@ -20,6 +20,7 @@
         <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.2" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+		<InternalsVisibleTo Include="MatchDataManager.IntegrationTest" />
     </ItemGroup>
 
 </Project>

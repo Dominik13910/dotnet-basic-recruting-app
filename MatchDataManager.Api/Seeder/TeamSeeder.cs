@@ -1,4 +1,5 @@
 ﻿using MatchDataManager.Api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MatchDataManager.Api.Seeder
 {
@@ -14,12 +15,14 @@ namespace MatchDataManager.Api.Seeder
         {
             if (_appDbContext.Database.CanConnect())
             {
-
-                if (!_appDbContext.Team.Any())
+                if (_appDbContext.Database.IsRelational())
                 {
-                    var roles = GetTeam();
-                    _appDbContext.Team.AddRange(roles);
-                    _appDbContext.SaveChanges();
+                    if (!_appDbContext.Team.Any())
+                    {
+                        var roles = GetTeam();
+                        _appDbContext.Team.AddRange(roles);
+                        _appDbContext.SaveChanges();
+                    }
                 }
             }
         }
