@@ -11,6 +11,6 @@ namespace MatchDataManager.Api.Interfaces
         Task<Guid> Create(CreateTeamDto dto);
         Task Delete(Guid id);
         Task Update(Guid id, UpdateTeamDto location);
-
+        Task<string> GenerateJWt(Guid id, TeamDto dto);
     }
 }

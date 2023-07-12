@@ -4,7 +4,7 @@ namespace MatchDataManager.Api.Seeder
 {
     public class TeamSeeder
     {
-        private readonly AppDbContext _appDbContext;
+       private readonly AppDbContext _appDbContext;
 
         public TeamSeeder(AppDbContext appDbContext)
         {
@@ -14,9 +14,13 @@ namespace MatchDataManager.Api.Seeder
         {
             if (_appDbContext.Database.CanConnect())
             {
-                var team = GetTeam();
-                _appDbContext.Team.AddRange(team);
-                _appDbContext.SaveChanges();
+
+                if (!_appDbContext.Team.Any())
+                {
+                    var roles = GetTeam();
+                    _appDbContext.Team.AddRange(roles);
+                    _appDbContext.SaveChanges();
+                }
             }
         }
         private IEnumerable<Team> GetTeam()
