@@ -5,7 +5,9 @@ VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchDataManager.Api", "MatchDataManager.Api\MatchDataManager.Api.csproj", "{29743F0C-25E4-4253-A539-95DA0E3332F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchDataManager.IntegrationTest", "MatchDataManager.IntegrationTest\MatchDataManager.IntegrationTest.csproj", "{CA3F6BF6-8362-42B5-8B2D-A0B8B05215FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchDataManager.IntegrationTest", "MatchDataManager.IntegrationTest\MatchDataManager.IntegrationTest.csproj", "{CA3F6BF6-8362-42B5-8B2D-A0B8B05215FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchDataManager.UnitTest", "MatchDataManager.UnitTest\MatchDataManager.UnitTest.csproj", "{3C9087A0-0C53-419E-81DA-3BCA242CA0F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CA3F6BF6-8362-42B5-8B2D-A0B8B05215FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA3F6BF6-8362-42B5-8B2D-A0B8B05215FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA3F6BF6-8362-42B5-8B2D-A0B8B05215FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C9087A0-0C53-419E-81DA-3BCA242CA0F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C9087A0-0C53-419E-81DA-3BCA242CA0F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C9087A0-0C53-419E-81DA-3BCA242CA0F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C9087A0-0C53-419E-81DA-3BCA242CA0F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

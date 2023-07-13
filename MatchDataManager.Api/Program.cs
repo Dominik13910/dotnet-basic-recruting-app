@@ -45,6 +45,7 @@ builder.Services.AddAuthentication(option =>
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseNpgsql(builder.Configuration.GetConnectionString("MyBoardsConnectionString")));
+
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<ITeamInterface, TeamRepository>();
 builder.Services.AddScoped<ILocationInterface, LocationsServices>();

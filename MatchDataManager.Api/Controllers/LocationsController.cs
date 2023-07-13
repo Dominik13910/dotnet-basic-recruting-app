@@ -17,8 +17,6 @@ public class LocationsController : ControllerBase
         _locationInterface = locationInterface;
     }
       
-
-
     [HttpPost]
     public async Task<ActionResult> AddLocation([FromBody] CreateLocationDto location)
     {
@@ -29,9 +27,7 @@ public class LocationsController : ControllerBase
     [HttpDelete]
     public async Task DeleteLocation([FromQuery]Guid locationId)
     {
-         await _locationInterface.Delete(locationId);
-        
-     
+         await _locationInterface.Delete(locationId);        
     }
 
     [HttpGet]
@@ -45,8 +41,7 @@ public class LocationsController : ControllerBase
     public async Task<ActionResult<LocationDto>> GetById([FromRoute]Guid id)
     {
         var result= await _locationInterface.GetById(id);
-        return Ok(result);
-     
+        return Ok(result);    
     }
 
     [HttpPut]

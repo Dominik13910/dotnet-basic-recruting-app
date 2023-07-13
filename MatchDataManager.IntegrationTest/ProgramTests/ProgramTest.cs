@@ -28,7 +28,6 @@ namespace MatchDataManager.IntegrationTest.ProgramTests
                        _controllerTypes.ForEach(c => services.AddScoped(c));
                    });
                });
-
         }
 
         [Fact]
