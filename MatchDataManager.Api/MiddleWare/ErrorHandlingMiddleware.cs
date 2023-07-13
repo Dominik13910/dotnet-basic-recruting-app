@@ -24,7 +24,7 @@ namespace MatchDataManager.Api.MiddleWare
             }
             catch (NotFoundException notFoundException)
             {
-                context.Response.StatusCode = 400;
+                context.Response.StatusCode = 404;
                 await context.Response.WriteAsync(notFoundException.Message);
             }
             catch (Exception e)

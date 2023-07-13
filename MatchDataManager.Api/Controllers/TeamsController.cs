@@ -18,8 +18,6 @@ public class TeamsController : ControllerBase
         _teamInterface = locationInterface;
     }
 
-
-
     [HttpPost]
     public async Task<ActionResult> AddTeam([FromBody] CreateTeamDto team)
     {
@@ -30,9 +28,7 @@ public class TeamsController : ControllerBase
     [HttpDelete]
     public async Task DeleteTeam([FromQuery] Guid id)
     {
-       await _teamInterface.Delete(id);
-        
-
+       await _teamInterface.Delete(id);       
     }
 
     [HttpGet]
@@ -48,12 +44,14 @@ public class TeamsController : ControllerBase
         var result = await _teamInterface.GetById(id);
         return Ok(result);
     }
+
      [HttpPut]
     public async Task  UpdateTeam([FromQuery] Guid id, [FromBody] UpdateTeamDto team)
     {
         await _teamInterface.Update(id, team);
         
     }
+
     [HttpPost("login")]
     public async Task<ActionResult> Login([FromBody] TeamDto dto, [FromRoute] Guid id)
     {
