@@ -1,10 +1,10 @@
-using MatchDataManager.Api.Dto.Location;
-using MatchDataManager.Api.Interfaces;
-using MatchDataManager.Api.Models;
-using MatchDataManager.Api.Repositories;
+using MatchDataManager.DataBase.Dto.Location;
+using MatchDataManager.Infrastructure.Interfaces;
+using MatchDataManager.DataBase.Models;
+using MatchDataManager.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MatchDataManager.Api.Controllers;
+namespace MatchDataManager.DataBase.Controllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -16,18 +16,18 @@ public class LocationsController : ControllerBase
     {
         _locationInterface = locationInterface;
     }
-      
+
     [HttpPost]
     public async Task<ActionResult> AddLocation([FromBody] CreateLocationDto location)
     {
         var result = await _locationInterface.Create(location);
-        return Created($"/api/Location/{result}", null); 
+        return Created($"/api/Location/{result}", null);
     }
 
     [HttpDelete]
-    public async Task DeleteLocation([FromQuery]Guid locationId)
+    public async Task DeleteLocation([FromQuery] Guid locationId)
     {
-         await _locationInterface.Delete(locationId);        
+        await _locationInterface.Delete(locationId);
     }
 
     [HttpGet]
@@ -38,16 +38,15 @@ public class LocationsController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<LocationDto>> GetById([FromRoute]Guid id)
+    public async Task<ActionResult<LocationDto>> GetById([FromRoute] Guid id)
     {
-        var result= await _locationInterface.GetById(id);
-        return Ok(result);    
+        var result = await _locationInterface.GetById(id);
+        return Ok(result);
     }
 
     [HttpPut]
     public async Task UpdateLocation([FromQuery] Guid id, [FromBody] UpdateLocationDto location)
     {
-       await _locationInterface.Update(id, location);
-        
+        await _locationInterface.Update(id, location);
     }
 }

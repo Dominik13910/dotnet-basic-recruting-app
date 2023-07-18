@@ -1,58 +1,70 @@
 ﻿using FluentAssertions;
-using MatchDataManager.Api.Models;
-using MatchDataManager.Api.Models.Paination;
+using MatchDataManager.DataBase.Models;
+using MatchDataManager.DataBase.Models.Paination;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using MatchDataManager.DataBase.Dto.Team;
+using MatchDataManager.Infrastructure.Services;
+using Moq;
+using MatchDataManager.Application.Authentication;
+using Microsoft.Extensions.Logging;
+using EntityFrameworkCoreMock;
+using Microsoft.AspNetCore.SignalR;
+using MatchDataManager.Application.Mappers;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using MatchDataManager.Infrastructure.Interfaces;
+using Microsoft.Extensions.Options;
+using System.Data.Entity.Infrastructure;
+using MockQueryable.Moq;
+using MockQueryable.EntityFrameworkCore;
+using System.Net.Sockets;
 
 namespace MatchDataManager.UnitTest.Pagination
 {
-    public class PaginationTest
+    public class TeamRepositoryPaginationTests
     {
         [Fact]
-        public void GetTeam_CorrectlyAppliesPagination()
+        public async Task GetAll_CorrectlyAppliesPagination()
         {
-            // Arrange
-            var teams = new List<Team>
-        {
-            new Team { Name = "Team1" },
-            new Team { Name = "Team2" },
-            new Team { Name = "Team3" },
-            new Team { Name = "Team4" },
-            new Team { Name = "Team5" },
-              new Team { Name = "Team1" },
-            new Team { Name = "Team2" },
-            new Team { Name = "Team3" },
-                  new Team { Name = "Team1" },
-            new Team { Name = "Team2" },
-            new Team { Name = "Team3" }
+            var data = new List<Team>
+            {
+                new Team { Name = "Team1" },
+                new Team { Name = "Team2" },
+                new Team { Name = "Team3" },
+                new Team { Name = "Team4" },
+                new Team { Name = "Team5" },
+                new Team { Name = "Team1" },
+                new Team { Name = "Team2" },
+                new Team { Name = "Team3" },
+                new Team { Name = "Team1" },
+                new Team { Name = "Team2" },
+                new Team { Name = "Team3" }
+            }.AsQueryable().BuildMockDbSet();
 
-        }.AsQueryable();
+            var mockSet = new Mock<DbSet<Team>>(data);
+            var dbOptions = new DbContextOptionsBuilder<AppDbContext>().UseNpgsql("witam").Options;
+            var myProfile = new TeamMappingProfile();
+            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
+            IMapper mapper = new Mapper(configuration);
+            var loggerMock = new Mock<ILogger<TeamServices>>();
+            var authenticationSettingsMock = new Mock<AuthenticationSettings>();
+            var mockContext = new Mock<AppDbContext>(dbOptions);
 
-            var query = new Query { PageSize = 2, PageNumber = 3};
+            mockContext.Setup(c => c.Team).Returns(data.Object);
 
-            // Act
-            var result = GetTeam(teams, query);
+            var service = new TeamServices(mockContext.Object, mapper, loggerMock.Object,
+                authenticationSettingsMock.Object);
+            var query = new DataBase.Models.Paination.Query { PageSize = 4, PageNumber = 2 };
+            var result = await service.GetAll(query);
 
-            // Assert
-            result.Should().HaveCount(query.PageSize);
-            result.Should().Contain(teams.Skip(query.PageSize * (query.PageNumber - 1)).Take(query.PageSize));
+            result.Items.Count.Should().Be(query.PageSize);
+            result.Items.Should().NotBeEmpty();
+            result.Items.Should().Contain(result.Items.Skip(3));
         }
-      
-
-        private List<Team> GetTeam(IQueryable<Team> teams, Query query)
-        {
-            return teams
-                .Skip(query.PageSize * (query.PageNumber - 1))
-                .Take(query.PageSize)
-                .ToList();
-        }
-
-      
-   
-   
     }
 }

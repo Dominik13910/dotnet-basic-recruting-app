@@ -29,6 +29,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MatchDataManager.Api\MatchDataManager.Api.csproj" />
+    <ProjectReference Include="..\MatchDataManager.Application\MatchDataManager.Application.csproj" />
+    <ProjectReference Include="..\MatchDataManager.DataBase\MatchDataManager.DataBase.csproj" />
+    <ProjectReference Include="..\MatchDataManager.Infrastructure\MatchDataManager.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

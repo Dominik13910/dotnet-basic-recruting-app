@@ -5,10 +5,10 @@ using FluentAssertions;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using MatchDataManager.Api.Models;
+using MatchDataManager.DataBase.Models;
 using FluentAssertions.Common;
-using MatchDataManager.Api.Dto.Location;
-using MatchDataManager.Api.Dto.Team;
+using MatchDataManager.DataBase.Dto.Location;
+using MatchDataManager.DataBase.Dto.Team;
 using MatchDataManager.IntegrationTest.Helpers;
 
 namespace MatchDataManager.IntegrationTest.ControllerTests
@@ -16,11 +16,9 @@ namespace MatchDataManager.IntegrationTest.ControllerTests
     public class LocationControllerTest : IClassFixture<WebApplicationFactory<Program>>
     {
         private HttpClient _httpClient;
-       
-
+        
         public LocationControllerTest()
         {
-            
             var factory = new WebApplicationFactory<Program>();
             _httpClient = factory.CreateClient();
         }
@@ -36,6 +34,7 @@ namespace MatchDataManager.IntegrationTest.ControllerTests
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
+
         [Fact]
         public async Task GetAll_WithQueryParameters_ReturnBadRequest()
         {
@@ -52,12 +51,13 @@ namespace MatchDataManager.IntegrationTest.ControllerTests
         public async Task Deleted_WithQueryParameters_ReturnOkResult()
         {
             //act
-            var response = await _httpClient.DeleteAsync("https://localhost:7234/Locations/42fbf5e0-b339-4514-9e11-9bdc15aee459");
+            var response =
+                await _httpClient.DeleteAsync("https://localhost:7234/Locations/42fbf5e0-b339-4514-9e11-9bdc15aee459");
 
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
-       
+
         [Fact]
         public async Task Deleted_WithQueryParameters_ReturnNotFound()
         {
@@ -74,7 +74,8 @@ namespace MatchDataManager.IntegrationTest.ControllerTests
         public async Task GetById_WithQueryParameters_ReturnOkResult()
         {
             //act
-            var response = await _httpClient.GetAsync("https://localhost:7234/Locations/42fbf5e0-b339-4514-9e11-9bdc15aee459");
+            var response =
+                await _httpClient.GetAsync("https://localhost:7234/Locations/42fbf5e0-b339-4514-9e11-9bdc15aee459");
 
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -84,12 +85,13 @@ namespace MatchDataManager.IntegrationTest.ControllerTests
         public async Task GetById_WithQueryParameters_ReturnNotFound()
         {
             //act
-            var response = await _httpClient.GetAsync("https://localhost:7234/Locations/42fbf5e0-b339-4514-9e11-9bdc15aee333");
+            var response =
+                await _httpClient.GetAsync("https://localhost:7234/Locations/42fbf5e0-b339-4514-9e11-9bdc15aee333");
 
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
-       
+
         //Created Action
 
         [Fact]
@@ -119,7 +121,6 @@ namespace MatchDataManager.IntegrationTest.ControllerTests
             {
                 Name = "Gace",
                 City = "City"
-
             };
             var httpContent = model.ToJsonHttpContent();
 
@@ -129,6 +130,7 @@ namespace MatchDataManager.IntegrationTest.ControllerTests
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
+
         [Fact]
         public async Task Create_WithQueryParameters_ReturnBadRequest()
         {
@@ -137,7 +139,6 @@ namespace MatchDataManager.IntegrationTest.ControllerTests
             {
                 Name = "Gace",
                 City = "City"
-
             };
             var httpContent = model.ToJsonHttpContent();
 
@@ -161,11 +162,13 @@ namespace MatchDataManager.IntegrationTest.ControllerTests
             var httpContent = model.ToJsonHttpContent();
 
             //act
-            var response = await _httpClient.PutAsync("https://localhost:7234/Locations?id=42fbf5e0-b339-4514-9e11-9bdc15aee459", httpContent);
+            var response =
+                await _httpClient.PutAsync("https://localhost:7234/Locations?id=42fbf5e0-b339-4514-9e11-9bdc15aee459",
+                    httpContent);
 
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-        }           
+        }
 
         [Fact]
         public async Task Update_WithQueryParameters_ReturnNotFound()
@@ -184,9 +187,5 @@ namespace MatchDataManager.IntegrationTest.ControllerTests
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
-      
-
-
-
     }
 }

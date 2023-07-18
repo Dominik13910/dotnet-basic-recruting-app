@@ -1,5 +1,5 @@
-﻿using MatchDataManager.Api.Models.Paination;
-using MatchDataManager.Api.Validators;
+﻿using MatchDataManager.DataBase.Models.Paination;
+using MatchDataManager.Application.Validators;
 
 namespace MatchDataManager.IntegrationTest.Validators
 {
@@ -15,7 +15,7 @@ namespace MatchDataManager.IntegrationTest.Validators
                 PageSize = 10,
             };
 
-        var result = validator.Validate(model);
+            var result = validator.Validate(model);
         }
     }
 }

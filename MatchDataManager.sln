@@ -7,7 +7,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchDataManager.Api", "Mat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchDataManager.IntegrationTest", "MatchDataManager.IntegrationTest\MatchDataManager.IntegrationTest.csproj", "{CA3F6BF6-8362-42B5-8B2D-A0B8B05215FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchDataManager.UnitTest", "MatchDataManager.UnitTest\MatchDataManager.UnitTest.csproj", "{3C9087A0-0C53-419E-81DA-3BCA242CA0F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchDataManager.UnitTest", "MatchDataManager.UnitTest\MatchDataManager.UnitTest.csproj", "{3C9087A0-0C53-419E-81DA-3BCA242CA0F3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F401142F-38EB-4B58-9613-3F6EC679BD30}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchDataManager.DataBase", "MatchDataManager.DataBase\MatchDataManager.DataBase.csproj", "{57969370-DA38-4F71-A9BE-63EF03991FD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchDataManager.Infrastructure", "MatchDataManager.Infrastructure\MatchDataManager.Infrastructure.csproj", "{BAA376EC-DAB0-4988-9704-02A8DFCA6F29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchDataManager.Application", "MatchDataManager.Application\MatchDataManager.Application.csproj", "{E97B9164-AD5B-4949-874C-A77A4BD29D84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +38,18 @@ Global
 		{3C9087A0-0C53-419E-81DA-3BCA242CA0F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C9087A0-0C53-419E-81DA-3BCA242CA0F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C9087A0-0C53-419E-81DA-3BCA242CA0F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57969370-DA38-4F71-A9BE-63EF03991FD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57969370-DA38-4F71-A9BE-63EF03991FD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57969370-DA38-4F71-A9BE-63EF03991FD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57969370-DA38-4F71-A9BE-63EF03991FD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAA376EC-DAB0-4988-9704-02A8DFCA6F29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAA376EC-DAB0-4988-9704-02A8DFCA6F29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAA376EC-DAB0-4988-9704-02A8DFCA6F29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAA376EC-DAB0-4988-9704-02A8DFCA6F29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E97B9164-AD5B-4949-874C-A77A4BD29D84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E97B9164-AD5B-4949-874C-A77A4BD29D84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E97B9164-AD5B-4949-874C-A77A4BD29D84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E97B9164-AD5B-4949-874C-A77A4BD29D84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
