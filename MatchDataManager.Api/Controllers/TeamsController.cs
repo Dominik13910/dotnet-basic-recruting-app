@@ -1,11 +1,11 @@
-using MatchDataManager.Api.Dto.Location;
-using MatchDataManager.Api.Dto.Team;
-using MatchDataManager.Api.Interfaces;
-using MatchDataManager.Api.Models.Paination;
-using MatchDataManager.Api.Repositories;
+using MatchDataManager.DataBase.Dto.Location;
+using MatchDataManager.DataBase.Dto.Team;
+using MatchDataManager.Infrastructure.Interfaces;
+using MatchDataManager.DataBase.Models.Paination;
+using MatchDataManager.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MatchDataManager.Api.Controllers;
+namespace MatchDataManager.DataBase.Controllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -28,13 +28,13 @@ public class TeamsController : ControllerBase
     [HttpDelete]
     public async Task DeleteTeam([FromQuery] Guid id)
     {
-       await _teamInterface.Delete(id);       
+        await _teamInterface.Delete(id);
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TeamDto>>> GetAll([FromQuery] Query query)
     {
-        var result =  await _teamInterface.GetAll(query);
+        var result = await _teamInterface.GetAll(query);
         return Ok(result);
     }
 
@@ -45,17 +45,16 @@ public class TeamsController : ControllerBase
         return Ok(result);
     }
 
-     [HttpPut]
-    public async Task  UpdateTeam([FromQuery] Guid id, [FromBody] UpdateTeamDto team)
+    [HttpPut]
+    public async Task UpdateTeam([FromQuery] Guid id, [FromBody] UpdateTeamDto team)
     {
         await _teamInterface.Update(id, team);
-        
     }
 
     [HttpPost("login")]
     public async Task<ActionResult> Login([FromBody] TeamDto dto, [FromRoute] Guid id)
     {
-        string token =  await _teamInterface.GenerateJWt(id, dto);
+        string token = await _teamInterface.GenerateJWt(id, dto);
         return Ok(token);
     }
 }

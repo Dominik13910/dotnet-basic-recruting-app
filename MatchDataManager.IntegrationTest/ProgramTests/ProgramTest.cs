@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using MatchDataManager.Api.Controllers;
+using MatchDataManager.DataBase.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using NLog.Config;
@@ -15,19 +15,19 @@ namespace MatchDataManager.IntegrationTest.ProgramTests
         public ProgramTest()
         {
             _controllerTypes = typeof(Program)
-               .Assembly
-               .GetTypes()
-               .Where(t => t.IsSubclassOf(typeof(ControllerBase)))
-           .ToList();
+                .Assembly
+                .GetTypes()
+                .Where(t => t.IsSubclassOf(typeof(ControllerBase)))
+                .ToList();
 
             _factory = new WebApplicationFactory<Program>()
-               .WithWebHostBuilder(builder =>
-               {
-                   builder.ConfigureServices(services =>
-                   {
-                       _controllerTypes.ForEach(c => services.AddScoped(c));
-                   });
-               });
+                .WithWebHostBuilder(builder =>
+                {
+                    builder.ConfigureServices(services =>
+                    {
+                        _controllerTypes.ForEach(c => services.AddScoped(c));
+                    });
+                });
         }
 
         [Fact]
@@ -42,6 +42,5 @@ namespace MatchDataManager.IntegrationTest.ProgramTests
                 controller.Should().NotBeNull();
             });
         }
-
     }
 }

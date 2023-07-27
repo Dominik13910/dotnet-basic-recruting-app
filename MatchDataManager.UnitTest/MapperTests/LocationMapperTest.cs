@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using FluentAssertions;
-using MatchDataManager.Api.Dto.Location;
-using MatchDataManager.Api.Mappers;
-using MatchDataManager.Api.Models;
+using MatchDataManager.DataBase.Dto.Location;
+using MatchDataManager.Application.Mappers;
+using MatchDataManager.DataBase.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MatchDataManager.Infrastructure.Mappers;
 
 namespace MatchDataManager.UnitTest.MapperTests
 {
@@ -17,16 +18,12 @@ namespace MatchDataManager.UnitTest.MapperTests
         public void CreateMap_LocationToLocationDto_MapsCorrectly()
         {
             // Arrange
-            var configuration = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<LocationMappingProfile>();
-            });
+            var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<LocationMappingProfile>(); });
 
             IMapper mapper = configuration.CreateMapper();
 
             var location = new Location
             {
-
                 Name = "Location 1",
                 City = "City 1"
             };
@@ -44,10 +41,7 @@ namespace MatchDataManager.UnitTest.MapperTests
         public void CreateMap_CreateLocationDtoToLocation_MapsCorrectly()
         {
             // Arrange
-            var configuration = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<LocationMappingProfile>();
-            });
+            var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<LocationMappingProfile>(); });
 
             IMapper mapper = configuration.CreateMapper();
 

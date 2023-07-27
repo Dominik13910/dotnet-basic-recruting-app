@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
-using MatchDataManager.Api.Dto.Location;
-using MatchDataManager.Api.Dto.Team;
-using MatchDataManager.Api.Mappers;
-using MatchDataManager.Api.Models;
+using MatchDataManager.DataBase.Dto.Location;
+using MatchDataManager.DataBase.Dto.Team;
+using MatchDataManager.Application.Mappers;
+using MatchDataManager.DataBase.Models;
 
 namespace MatchDataManager.UnitTest.MapperTests
 {
@@ -18,16 +18,12 @@ namespace MatchDataManager.UnitTest.MapperTests
         public void CreateMap_LocationToLocationDto_MapsCorrectly()
         {
             // Arrange
-            var configuration = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<TeamMappingProfile>();
-            });
+            var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<TeamMappingProfile>(); });
 
             IMapper mapper = configuration.CreateMapper();
 
             var location = new Team
             {
-                
                 Name = "Team 1",
                 CoachName = "Andrzej"
             };
@@ -45,10 +41,7 @@ namespace MatchDataManager.UnitTest.MapperTests
         public void CreateMap_CreateLocationDtoToLocation_MapsCorrectly()
         {
             // Arrange
-            var configuration = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<TeamMappingProfile>();
-            });
+            var configuration = new MapperConfiguration(cfg => { cfg.AddProfile<TeamMappingProfile>(); });
 
             IMapper mapper = configuration.CreateMapper();
 
